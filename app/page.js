@@ -362,6 +362,10 @@ function BarChart({ rows, valueKey, labelKey = "platform", highlight = "IMCO", s
           const isDimmed = hoverIdx !== null && !isHovered;
           const color = isHighlight ? "#39cbf7" : (row.color || "#718096");
 
+          const barTooNarrow = Math.abs(valX - zeroX) < 60;
+          const labelX = barTooNarrow ? zeroX + 12 : (raw >= 0 ? valX + 12 : valX - 12);
+          const labelAnchor = barTooNarrow ? "start" : (raw >= 0 ? "start" : "end");
+
           return (
             <g
               key={`${row[labelKey]}-${i}`}
@@ -399,9 +403,9 @@ function BarChart({ rows, valueKey, labelKey = "platform", highlight = "IMCO", s
                 }}
               />
               <text
-                x={raw >= 0 ? valX + 12 : valX - 12}
+                x={labelX}
                 y={y + barH * 0.65}
-                textAnchor={raw >= 0 ? "start" : "end"}
+                textAnchor={labelAnchor}
                 className="value-label"
                 fontWeight={isHovered ? "800" : "650"}
                 fill={isHovered ? "#17202f" : "#334155"}
