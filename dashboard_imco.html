@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard IMCO · Redes y Comunicación 2026</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --line: #d9e0ea;
+      --accent: #0f766e;
+      --accent-2: #c2410c;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .07);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    header {
+      padding: 22px 28px 14px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .topbar { display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
+    .subtitle { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff;
+    }
+    main { padding: 24px 28px 38px; max-width: 1480px; margin: 0 auto; }
+    section { margin-bottom: 28px; }
+    h2 { font-size: 18px; margin: 0 0 14px; letter-spacing: 0; }
+    .grid { display: grid; gap: 14px; }
+    .cards { grid-template-columns: repeat(6, minmax(150px, 1fr)); }
+    .two { grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .card { padding: 14px; min-height: 104px; display: flex; flex-direction: column; justify-content: space-between; }
+    .card span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+    .card strong { font-size: 26px; line-height: 1.1; margin-top: 8px; }
+    .card em { color: var(--muted); font-style: normal; font-size: 13px; margin-top: 8px; }
+    .panel { padding: 18px; min-width: 0; }
+    .executive { font-size: 15px; line-height: 1.55; margin: 0; color: #273449; }
+    .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    select, button {
+      font: inherit;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+      min-height: 38px;
+    }
+    button { cursor: pointer; }
+    button.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .chart { width: 100%; height: 330px; display: block; }
+    .chart.small { height: 250px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    tbody tr:hover { background: #f8fafc; }
+    .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 8px; border-radius: 999px; background: #eef2ff; color: #3730a3; font-size: 12px; }
+    .warn { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+    .ok { background: #ecfdf5; color: #047857; }
+    .findings { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .finding { border-left: 4px solid var(--accent); padding: 0 0 0 12px; min-height: 150px; }
+    .finding h3 { margin: 0 0 8px; font-size: 15px; }
+    .finding p { margin: 0; color: #475569; font-size: 13px; line-height: 1.45; }
+    .recs { margin: 0; padding-left: 18px; color: #334155; line-height: 1.5; }
+    .recs li { margin: 8px 0; }
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 12px; }
+    .dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 6px; }
+    footer { color: var(--muted); font-size: 12px; padding-top: 8px; }
+    @media (max-width: 1180px) {
+      .cards { grid-template-columns: repeat(3, minmax(160px, 1fr)); }
+      .two, .three, .findings { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      header, main { padding-left: 16px; padding-right: 16px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .card strong { font-size: 22px; }
+      h1 { font-size: 21px; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>Dashboard IMCO · Redes y Comunicación 2026</h1>
+        <p class="subtitle">Análisis del 29 de diciembre de 2025 al 10 de mayo de 2026 · 19 semanas</p>
+      </div>
+      <nav>
+        <a href="#resumen">Resumen</a>
+        <a href="#evolucion">Evolución</a>
+        <a href="#metas">Metas</a>
+        <a href="#sector">Sector</a>
+        <a href="#recomendaciones">Recomendaciones</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section id="resumen">
+      <div class="grid cards" id="cards"></div>
+    </section>
+
+    <section class="grid two">
+      <div class="panel">
+        <h2>Lectura Ejecutiva</h2>
+        <p class="executive" id="executive"></p>
+      </div>
+      <div class="panel warn">
+        <h2>Alerta Newsletter</h2>
+        <p class="executive" id="newsletterAlert"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Visión General Por Plataforma</h2>
+      <div class="panel">
+        <table id="overview"></table>
+      </div>
+    </section>
+
+    <section id="evolucion" class="grid two">
+      <div class="panel">
+        <div class="toolbar">
+          <h2 style="margin-right:auto;margin-bottom:0">Evolución Semanal</h2>
+          <select id="metricSelect">
+            <option value="followers">Seguidores</option>
+            <option value="reach">Impresiones / visualizaciones</option>
+            <option value="interactions">Interacciones</option>
+            <option value="engagement">Engagement estimado</option>
+          </select>
+        </div>
+        <svg class="chart" id="lineChart" role="img" aria-label="Evolución semanal por plataforma"></svg>
+        <div class="legend" id="lineLegend"></div>
+      </div>
+      <div class="panel">
+        <h2>Impresiones Acumuladas</h2>
+        <svg class="chart" id="barChart" role="img" aria-label="Impresiones acumuladas por plataforma"></svg>
+      </div>
+    </section>
+
+    <section class="findings" id="findings"></section>
+
+    <section id="metas" class="grid two">
+      <div class="panel">
+        <h2>Progreso Hacia Metas De Seguidores</h2>
+        <table id="goals"></table>
+      </div>
+      <div class="panel">
+        <h2>Alcance Real Vs Meta Proporcional</h2>
+        <table id="reachGoals"></table>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <div class="panel">
+        <h2>Seguimiento Mensual De Seguidores</h2>
+        <svg class="chart small" id="monthlyFollowers"></svg>
+      </div>
+      <div class="panel">
+        <h2>Alcance 2026 Vs Meta Mensual</h2>
+        <svg class="chart small" id="monthlyReach"></svg>
+      </div>
+    </section>
+
+    <section id="sector" class="grid two">
+      <div class="panel">
+        <div class="toolbar">
+          <h2 style="margin-right:auto;margin-bottom:0">Comparativo Sector Think Tank</h2>
+          <select id="competitiveSelect"></select>
+        </div>
+        <svg class="chart small" id="competitiveChart"></svg>
+      </div>
+      <div class="panel">
+        <h2>Lectura Competitiva</h2>
+        <p class="executive" id="competitiveText"></p>
+      </div>
+    </section>
+
+    <section id="recomendaciones">
+      <div class="panel">
+        <h2>Observaciones Y Recomendaciones</h2>
+        <ol class="recs" id="recommendations"></ol>
+      </div>
+    </section>
+    <footer>Fuente: KPIs_Redes_Coms_Reporte_semanal_2026_analizado.xlsx. Dashboard generado localmente.</footer>
+  </main>
+
+  <script id="dashboard-data" type="application/json">{"analysis": {"executive": "En 19 semanas IMCO sumó ~10,679 seguidores netos en las 5 redes principales y acumuló ~6 millones de impresiones. Instagram y TikTok lideran el crecimiento porcentual (+24.3% y +31.9%); Twitter es el más comprometido (ER 6.68%) pero su crecimiento de seguidores está estancado (+0.6%). En proyección lineal, 4 de 5 metas anuales de seguidores se cumplirán; solo TikTok va rezagado. Las metas de alcance ya están superadas excepto Twitter (96%). El newsletter muestra una caída sostenida y estadísticamente significativa en la tasa de apertura (-7 pp desde enero). YouTube es volátil: 46% de las vistas se concentra en 3 semanas.", "overview": [{"platform": "Facebook", "start": "135,044", "end": "138,225", "growth": "+3,181", "growthPct": "+2.4%", "er": "2.17%"}, {"platform": "Twitter/X", "start": "145,071", "end": "145,896", "growth": "+825", "growthPct": "+0.6%", "er": "6.68%"}, {"platform": "Instagram", "start": "14,409", "end": "17,904", "growth": "+3,495", "growthPct": "+24.3%", "er": "2.51%"}, {"platform": "LinkedIn", "start": "21,760", "end": "23,954", "growth": "+2,194", "growthPct": "+10.1%", "er": "1.86%"}, {"platform": "TikTok", "start": "3,089", "end": "4,073", "growth": "+984", "growthPct": "+31.9%", "er": "5.71%"}], "findings": [{"platform": "Facebook", "text": "Volumen líder en impresiones (2.5M acumuladas) pero crecimiento estancado (+2.4%). Volatilidad alta (CV 75%): la semana pico tuvo 14x más impresiones que la peor. Mediana (93k) muy por debajo del promedio (132k): pocos posts dominan el alcance."}, {"platform": "Twitter/X", "text": "Mejor ER del portafolio (6.68%) — la audiencia más comprometida. Pero crecimiento casi nulo (+41 seguidores/semana). La meta anual de +1,800 va al 46% con el año al 35%: se cumplirá apenas."}, {"platform": "Instagram", "text": "Estrella en crecimiento absoluto (+3,495, +24.3%). Volatilidad altísima (CV 191%) por la semana pico de 583k. Meta anual ya al 57% del año transcurrido al 35% — va adelantada."}, {"platform": "LinkedIn", "text": "Crecimiento moderado (+10.1%) consistente con el perfil B2B. ER bajo (1.86%) pero esperable para la plataforma. El ICR 2026 disparó el alcance en su semana de lanzamiento."}, {"platform": "TikTok", "text": "Mayor crecimiento porcentual (+31.9%) sobre base pequeña. En proyección lineal NO alcanza la meta anual: necesita +57.7 seguidores/semana, va a +52."}], "goals": [{"platform": "Facebook", "weeklyGrowth": "+167", "projection": "143,750", "goal": "138,824", "status": "Sí — holgado"}, {"platform": "Twitter/X", "weeklyGrowth": "+43", "projection": "147,329", "goal": "146,871", "status": "Sí — apenas"}, {"platform": "Instagram", "weeklyGrowth": "+184", "projection": "23,974", "goal": "20,529", "status": "Sí — holgado"}, {"platform": "LinkedIn", "weeklyGrowth": "+115", "projection": "27,765", "goal": "26,260", "status": "Sí — holgado"}, {"platform": "TikTok", "weeklyGrowth": "+52", "projection": "5,782", "goal": "6,089", "status": "No — falta 5%"}], "reachGoals": [{"platform": "Facebook", "actual": "2,503,237", "monthlyGoal": "350,000", "accGoal": "1,515,800", "achievement": "165%"}, {"platform": "Twitter/X", "actual": "1,470,522", "monthlyGoal": "350,000", "accGoal": "1,515,800", "achievement": "97%"}, {"platform": "Instagram", "actual": "1,267,932", "monthlyGoal": "150,000", "accGoal": "649,650", "achievement": "195%"}, {"platform": "LinkedIn", "actual": "545,656", "monthlyGoal": "85,000", "accGoal": "368,050", "achievement": "148%"}, {"platform": "TikTok", "actual": "235,473", "monthlyGoal": "45,000", "accGoal": "194,850", "achievement": "121%"}], "recommendations": ["1. Volatilidad alta en todas las plataformas refleja un modelo de comunicación basado en eventos (ICR, comunicados, webinars) más que en contenido sostenido. Las métricas semanales individuales tienen mucho ruido; promedios mensuales/trimestrales son más informativos.", "2. Instagram y TikTok son los motores de crecimiento. Twitter mantiene calidad de engagement pero no crece — evaluar si la inversión de tiempo allí es proporcional a su valor estratégico actual.", "3. El newsletter es el activo con mayor riesgo: alcanza 13.5k personas semanalmente pero su efectividad cae. Limpieza de lista, segmentación y A/B testing en asuntos son palancas obvias.", "4. Meta de alcance de Twitter (350k/mes) parece desproporcionada al canal — promedio real ~318k y crecimiento de followers nulo. Considerar ajustar la meta o invertir en el canal.", "5. Meta de TikTok (+3,000 followers) requiere ritmo más agresivo del actual (+52/sem real vs +57.7/sem necesario). Alcanzable pero necesita atención.", "6. La captura semanal sistemática los lunes (a partir de mayo) permitirá análisis más limpio: todas las campañas se medirán con el mismo offset temporal."], "newsletterAlert": "La tasa de apertura cae -0.32 puntos porcentuales por semana (R²=0.83, p<0.001). De 32.1% en enero a 25.2% en mayo. Los entregados se mantienen estables, por lo que no es problema de entregabilidad. Posibles causas: fatiga de lista, base nueva menos comprometida, cambios en filtros de Gmail/Outlook, o estacionalidad. Si la pendiente se mantiene, la tasa llegaría a ~20% en septiembre.", "competitive": "Resumen competitivo: IMCO lidera Instagram y TikTok en crecimiento porcentual del sector. En Twitter va #2 detrás de MCCI (aunque MCCI parte de 3x más base). En LinkedIn va #2 detrás de México ¿Cómo vamos? Narrativa directiva: 'IMCO lidera el crecimiento digital del sector think tank en redes emergentes (IG y TikTok)'."}, "weekly": {"weeks": ["29 de diciembre al 4 de enero", "5 de enero al 11 de enero", "12 de enero al 18 de enero", "19 de enero al 25 de enero", "26 de enero al 1 de febrero", "2 de febrero al 8 de febrero", "9 de febrero al 15 de febrero", "16 de febrero al 22 de febrero", "23 de febrero al 1 de marzo", "2 de marzo al 8 de marzo", "9 de marzo al 15 de marzo", "16 de marzo al 22 de marzo", "23 de marzo al 29 de marzo", "30 de marzo al 5 de abril", "6 de abril al 12 de abril", "13 de abril al 19 de abril", "20 al 26 de abril", "27 de abril al 3 de mayo", "4 al 10 de mayo"], "series": {"Facebook": {"followers": [135044.0, 135168.0, 135217.0, 135588.0, 135812.0, 135863.0, 136063.0, 136180.0, 136255.0, 136653.0, 136725.0, 136950.0, 137686.0, 137734.0, 137784.0, 137822.0, 137793.0, 137821.0, 138225.0], "reach": [125807.0, 91614.0, 41882.0, 238168.0, 80697.0, 55740.0, 127520.0, 93163.0, 124223.0, 353056.0, 93926.0, 201646.0, 264288.0, 57131.0, 79850.0, 77429.0, 25010.0, 40884.0, 331203.0], "interactions": [1381.0, 1734.0, 942.0, 4466.0, 1730.0, 1220.0, 2853.0, 1908.0, 2329.0, 9247.0, 2359.0, 3889.0, 5556.0, 1544.0, 1954.0, 1842.0, 433.0, 963.0, 7851.0], "engagement": [1.0977131638144142, 1.8927238195035696, 2.2491762571032905, 1.8751469550905244, 2.1438219512497367, 2.188733405095084, 2.2372961104140527, 2.0480233569120787, 1.8748540930423514, 2.619131242635729, 2.511551647041288, 1.9286273965265863, 2.1022520886305847, 2.702560781362133, 2.4470882905447717, 2.378953622027922, 1.7313074770091963, 2.3554446727326095, 2.370449543029501], "color": "#2563eb"}, "Twitter/X": {"followers": [145071.0, 145148.0, 145164.0, 145202.0, 145194.0, 145220.0, 145238.0, 145281.0, 145319.0, 145433.0, 145448.0, 145555.0, 145652.0, 145588.0, 145429.0, 145622.0, 145762.0, 145761.0, 145896.0], "reach": [49544.0, 46674.0, 93643.0, 96158.0, 61328.0, 43309.0, 32979.0, 41114.0, 68041.0, 109402.0, 42066.0, 184851.0, 108050.0, 49993.0, 44739.0, 47285.0, 57772.0, 48530.0, 245044.0], "interactions": [5393.0, 4648.0, 3967.0, 4103.0, 4460.0, 3500.0, 2915.0, 3491.0, 4941.0, 8284.0, 2857.0, 9737.0, 6540.0, 3614.0, 3995.0, 4697.0, 4269.0, 2525.0, 14258.0], "engagement": [10.88527369610851, 9.958435103055233, 4.236301699005798, 4.2669356683791255, 7.272371510566137, 8.081461128171973, 8.83895812486734, 8.491024955003162, 7.261798033538602, 7.572073636679402, 6.791708267959873, 5.267485704702707, 6.0527533549282735, 7.229012061688636, 8.929569279599454, 9.933382679496669, 7.389392785432388, 5.202967236760767, 5.818546873214606], "color": "#111827"}, "Instagram": {"followers": [14409.0, 14710.0, 14875.0, 14969.0, 15056.0, 15150.0, 15270.0, 15361.0, 15486.0, 16445.0, 16516.0, 16842.0, 17241.0, 17385.0, 17513.0, 17573.0, 17623.0, 17707.0, 17904.0], "reach": [13714.0, 56077.0, 26635.0, 27055.0, 37418.0, 39343.0, 41019.0, 43796.0, 47217.0, 613662.0, 49769.0, 49883.0, 120821.0, 38735.0, 57179.0, 42154.0, 38445.0, 33424.0, 143140.0], "interactions": [250.0, 1281.0, 568.0, 378.0, 711.0, 682.0, 980.0, 876.0, 682.0, 12688.0, 1356.0, 978.0, 2459.0, 890.0, 1259.0, 651.0, 675.0, 1120.0, 3394.0], "engagement": [1.8229546448884353, 2.2843590063662464, 2.132532382203867, 1.3971539456662354, 1.900155005612272, 1.7334722822357218, 2.3891367415100317, 2.0001826650835692, 1.4443950272147743, 2.067587694854822, 2.7245875946874563, 1.960587775394423, 2.035242217826371, 2.297663611720666, 2.2018573252417846, 1.5443374294254402, 1.7557549746390948, 3.350885591191958, 2.371105211680872], "color": "#db2777"}, "LinkedIn": {"followers": [21760.0, 21888.0, 21978.0, 22032.0, 22094.0, 22156.0, 22233.0, 22301.0, 22435.0, 22682.0, 22820.0, 23042.0, 23173.0, 23323.0, 23445.0, 23555.0, 23675.0, 23788.0, 23954.0], "reach": [25464.0, 35697.0, 13956.0, 16759.0, 16835.0, 12224.0, 21713.0, 18812.0, 106703.0, 46766.0, 38220.0, 23526.0, 26014.0, 30872.0, 27924.0, 18843.0, 25546.0, 10287.0, 29495.0], "interactions": [365.0, 494.0, 239.0, 270.0, 245.0, 227.0, 557.0, 361.0, 1809.0, 1004.0, 803.0, 435.0, 508.0, 652.0, 370.0, 286.0, 448.0, 344.0, 747.0], "engagement": [1.43339616713792, 1.3838697929798023, 1.7125250788191457, 1.6110746464586192, 1.4553014553014554, 1.857002617801047, 2.5652834707318197, 1.9189878800765467, 1.6953600179938708, 2.14685882906385, 2.1009942438513867, 1.8490181076256058, 1.952794649035135, 2.1119461000259134, 1.3250250680418278, 1.5178050204319906, 1.753699209269553, 3.344026441139302, 2.532632649601627], "color": "#0f766e"}, "TikTok": {"followers": [3089.0, 3111.0, 3117.0, 3127.0, 3324.0, 3362.0, 3384.0, 3401.0, 3412.0, 3594.0, 3603.0, 3625.0, 3908.0, 3936.0, 3992.0, 4013.0, 4034.0, 4068.0, 4073.0], "reach": [5457.0, 5579.0, 5397.0, 7832.0, 10712.0, 11672.0, 4076.0, 8178.0, 6396.0, 55803.0, 11407.0, 6286.0, 35906.0, 24639.0, 11763.0, 7990.0, 4742.0, 6913.0, 4725.0], "interactions": [157.0, 138.0, 140.0, 186.0, 397.0, 402.0, 114.0, 305.0, 195.0, 7084.0, 632.0, 152.0, 1273.0, 709.0, 409.0, 497.0, 260.0, 264.0, 131.0], "engagement": [2.877038665933663, 2.4735615701738665, 2.594033722438392, 2.3748723186925433, 3.706123973114264, 3.4441398217957504, 2.7968596663395484, 3.729518219613597, 3.048780487804878, 12.69465799329785, 5.540457613745946, 2.4180719058224627, 3.545368462095472, 2.877551848695158, 3.4770041656040127, 6.220275344180226, 5.4829185997469425, 3.8188919427166206, 2.7724867724867726], "color": "#7c3aed"}}, "summaries": [{"platform": "Facebook", "start": 135044.0, "end": 138225.0, "growth": 3181.0, "growthPct": 2.355528568466574, "reach": 2503237.0, "interactions": 54201.0, "er": 2.1449924144087062, "color": "#2563eb"}, {"platform": "Twitter/X", "start": 145071.0, "end": 145896.0, "growth": 825.0, "growthPct": 0.5686870566825899, "reach": 1470522.0, "interactions": 98194.0, "er": 7.341023778903087, "color": "#111827"}, {"platform": "Instagram", "start": 14409.0, "end": 17904.0, "growth": 3495.0, "growthPct": 24.255673537372477, "reach": 1519486.0, "interactions": 31878.0, "er": 2.0744184803917918, "color": "#db2777"}, {"platform": "LinkedIn", "start": 21760.0, "end": 23954.0, "growth": 2194.0, "growthPct": 10.082720588235293, "reach": 545656.0, "interactions": 10164.0, "er": 1.9088211287045482, "color": "#0f766e"}, {"platform": "TikTok", "start": 3089.0, "end": 4073.0, "growth": 984.0, "growthPct": 31.854969245710585, "reach": 235473.0, "interactions": 13445.0, "er": 3.99434805759463, "color": "#7c3aed"}]}, "followersMonthly": {"months": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], "rows": [{"platform": "Facebook", "values": [135863.0, 136255.0, 137734.0, null, null, null, null, null, null, null, null, null]}, {"platform": "Twitter / X", "values": [145220.0, 145319.0, 145588.0, null, null, null, null, null, null, null, null, null]}, {"platform": "Instagram", "values": [15150.0, 15486.0, 17385.0, null, null, null, null, null, null, null, null, null]}, {"platform": "LinkedIn", "values": [22156.0, 22435.0, 23323.0, null, null, null, null, null, null, null, null, null]}, {"platform": "TikTok", "values": [3362.0, 3412.0, 3936.0, null, null, null, null, null, null, null, null, null]}]}, "reachTracking": {"months": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], "rows": [{"platform": "Facebook", "goal": 350000.0, "values": [591045.0, 449232.0, 1072767.0, null, null, null, null, null, null, null, null, null]}, {"platform": "Twitter / X", "goal": 350000.0, "values": [333491.0, 198556.0, 493938.0, null, null, null, null, null, null, null, null, null]}, {"platform": "Instagram", "goal": 150000.0, "values": [122452.0, 167904.0, 864800.0, null, null, null, null, null, null, null, null, null]}, {"platform": "LinkedIn", "goal": 85000.0, "values": [93679.0, 88915.0, 158365.0, null, null, null, null, null, null, null, null, null]}, {"platform": "TikTok", "goal": 45000.0, "values": [26093.0, 27600.0, 133173.0, null, null, null, null, null, null, null, null, null]}]}, "competitive": {"Twitter": [{"name": "IMCO", "start": 145189.0, "end": 145589.0, "change": 400.0, "pct": 0.27550296510066186}, {"name": "México ¿Cómo vamos?", "start": 137242.0, "end": 137201.0, "change": -41.0, "pct": -0.02987423674968304}, {"name": "Mexicanos contra la corrupción", "start": 396242.0, "end": 398507.0, "change": 2265.0, "pct": 0.5716203734081697}, {"name": "México Evalúa", "start": 142996.0, "end": 143186.0, "change": 190.0, "pct": 0.1328708495342527}, {"name": "Data Cívica", "start": 33144.0, "end": 33190.0, "change": 46.0, "pct": 0.13878831764421917}, {"name": "CIEP", "start": 16530.0, "end": 16525.0, "change": -5.0, "pct": -0.030248033877797946}], "Instagram": [{"name": "IMCO", "start": 14882.0, "end": 17385.0, "change": 2503.0, "pct": 16.818975944093538}, {"name": "México ¿Cómo vamos?", "start": 11316.0, "end": 12536.0, "change": 1220.0, "pct": 10.781194768469424}, {"name": "Mexicanos contra la corrupción", "start": 33611.0, "end": 34510.0, "change": 899.0, "pct": 2.6747195858498705}, {"name": "México Evalúa", "start": 7909.0, "end": 8049.0, "change": 140.0, "pct": 1.7701352889113668}, {"name": "Data Cívica", "start": 9032.0, "end": 9659.0, "change": 627.0, "pct": 6.941984056687334}, {"name": "CIEP", "start": 643.0, "end": 697.0, "change": 54.0, "pct": 8.398133748055987}], "LinkedIn": [{"name": "IMCO", "start": 21995.0, "end": 23326.0, "change": 1331.0, "pct": 6.0513753125710394}, {"name": "México ¿Cómo vamos?", "start": 2718.0, "end": 2981.0, "change": 263.0, "pct": 9.676232523914644}, {"name": "México Evalúa", "start": 14023.0, "end": 14435.0, "change": 412.0, "pct": 2.938030378663624}], "TikTok": [{"name": "IMCO", "start": 3117.0, "end": 3936.0, "change": 819.0, "pct": 26.27526467757459}, {"name": "México ¿Cómo vamos?", "start": 625.0, "end": 729.0, "change": 104.0, "pct": 16.64}, {"name": "Mexicanos contra la corrupción", "start": 68300.0, "end": 69300.0, "change": 1000.0, "pct": 1.4641288433382138}, {"name": "México Evalúa", "start": 463.0, "end": 489.0, "change": 26.0, "pct": 5.615550755939525}]}, "cards": [{"label": "Seguidores actuales", "value": "330,052", "detail": "5 redes principales"}, {"label": "Crecimiento neto", "value": "+10,679", "detail": "29 dic 2025 a 10 may 2026"}, {"label": "Impresiones acumuladas", "value": "6,274,374", "detail": "aprox. 19 semanas"}, {"label": "Interacciones", "value": "207,882", "detail": "interacciones / reacciones / likes"}, {"label": "Mayor crecimiento", "value": "TikTok", "detail": "31.9%"}, {"label": "Mayor engagement", "value": "Twitter/X", "detail": "7.3%"}]}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('dashboard-data').textContent);
+    const $ = (id) => document.getElementById(id);
+    const fmt = new Intl.NumberFormat('es-MX');
+    const colors = Object.fromEntries(data.weekly.summaries.map(d => [d.platform, d.color]));
+
+    function n(v) { return v === null || Number.isNaN(v) ? 'N/D' : fmt.format(Math.round(v)); }
+    function pct(v) { return v === null || Number.isNaN(v) ? 'N/D' : v.toFixed(1) + '%'; }
+    function esc(v) { return String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function renderCards() {
+      $('cards').innerHTML = data.cards.map(c => `<div class="card"><span>${esc(c.label)}</span><strong>${esc(c.value)}</strong><em>${esc(c.detail)}</em></div>`).join('');
+      $('executive').textContent = data.analysis.executive;
+      $('newsletterAlert').textContent = data.analysis.newsletterAlert;
+      $('competitiveText').textContent = data.analysis.competitive;
+    }
+
+    function renderTable(id, columns, rows) {
+      const thead = `<thead><tr>${columns.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr></thead>`;
+      const tbody = `<tbody>${rows.map(row => `<tr>${columns.map(c => `<td>${c.render ? c.render(row) : esc(row[c.key])}</td>`).join('')}</tr>`).join('')}</tbody>`;
+      $(id).innerHTML = thead + tbody;
+    }
+
+    function renderOverview() {
+      renderTable('overview', [
+        {label:'Plataforma', key:'platform'},
+        {label:'Inicio', key:'start'},
+        {label:'Fin', key:'end'},
+        {label:'Crecimiento', key:'growth'},
+        {label:'% crec.', key:'growthPct'},
+        {label:'ER prom.', key:'er'}
+      ], data.analysis.overview);
+    }
+
+    function chartBox(svg) {
+      const w = svg.clientWidth || 800;
+      const h = svg.clientHeight || 320;
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.innerHTML = '';
+      return {w,h,p:{l:54,r:18,t:18,b:44}};
+    }
+
+    function scale(value, inMin, inMax, outMin, outMax) {
+      if (inMax === inMin) return (outMin + outMax) / 2;
+      return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
+    }
+
+    function linePath(points) {
+      return points.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    }
+
+    function addText(svg, x, y, text, anchor='start', size=11, fill='#64748b') {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', x); t.setAttribute('y', y); t.setAttribute('text-anchor', anchor);
+      t.setAttribute('font-size', size); t.setAttribute('fill', fill); t.textContent = text;
+      svg.appendChild(t);
+      return t;
+    }
+
+    function renderLineChart() {
+      const metric = $('metricSelect').value;
+      const svg = $('lineChart');
+      const {w,h,p} = chartBox(svg);
+      const weeks = data.weekly.weeks;
+      const series = Object.entries(data.weekly.series).map(([platform, values]) => ({platform, values: values[metric].map(v => v === null ? null : Number(v))}));
+      const all = series.flatMap(s => s.values).filter(v => v !== null && Number.isFinite(v));
+      const min = metric === 'engagement' ? 0 : Math.min(...all) * .96;
+      const max = Math.max(...all) * 1.06;
+      const x0 = p.l, x1 = w - p.r, y0 = h - p.b, y1 = p.t;
+      for (let i=0;i<5;i++) {
+        const y = scale(i, 0, 4, y0, y1);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x0); line.setAttribute('x2', x1); line.setAttribute('y1', y); line.setAttribute('y2', y);
+        line.setAttribute('stroke', '#e5e7eb'); svg.appendChild(line);
+        const val = scale(i, 0, 4, min, max);
+        addText(svg, x0-8, y+4, metric === 'engagement' ? pct(val) : compact(val), 'end');
+      }
+      series.forEach(s => {
+        const pts = s.values.map((v,i) => v === null ? null : ({x: scale(i,0,weeks.length-1,x0,x1), y: scale(v,min,max,y0,y1)})).filter(Boolean);
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', linePath(pts)); path.setAttribute('fill', 'none'); path.setAttribute('stroke', colors[s.platform] || '#334155');
+        path.setAttribute('stroke-width', 2.6); path.setAttribute('stroke-linecap', 'round'); path.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(path);
+      });
+      [0, Math.floor((weeks.length-1)/2), weeks.length-1].forEach(i => addText(svg, scale(i,0,weeks.length-1,x0,x1), h-16, weeks[i], 'middle', 10));
+      $('lineLegend').innerHTML = series.map(s => `<span><i class="dot" style="background:${colors[s.platform]}"></i>${esc(s.platform)}</span>`).join('');
+    }
+
+    function compact(v) {
+      if (Math.abs(v) >= 1000000) return (v/1000000).toFixed(1) + 'M';
+      if (Math.abs(v) >= 1000) return (v/1000).toFixed(0) + 'k';
+      return Math.round(v);
+    }
+
+    function renderBarChart(svgId, rows, valueKey, labelKey='platform', colorFn=null) {
+      const svg = $(svgId);
+      const {w,h,p} = chartBox(svg);
+      const vals = rows.map(r => Number(r[valueKey] ?? 0));
+      const max = Math.max(...vals) * 1.12;
+      const gap = 12;
+      const barH = Math.max(22, (h - p.t - p.b - gap*(rows.length-1)) / rows.length);
+      rows.forEach((r,i) => {
+        const y = p.t + i*(barH+gap);
+        const bw = scale(Number(r[valueKey] || 0), 0, max, 0, w-p.l-p.r-86);
+        const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        rect.setAttribute('x', p.l); rect.setAttribute('y', y); rect.setAttribute('width', bw); rect.setAttribute('height', barH);
+        rect.setAttribute('rx', 5); rect.setAttribute('fill', colorFn ? colorFn(r, i) : (r.color || colors[r.platform] || '#0f766e'));
+        svg.appendChild(rect);
+        addText(svg, p.l-8, y+barH*.65, r[labelKey], 'end', 11, '#334155');
+        addText(svg, p.l+bw+8, y+barH*.65, compact(Number(r[valueKey] || 0)), 'start', 11, '#334155');
+      });
+    }
+
+    function renderBars() {
+      renderBarChart('barChart', [...data.weekly.summaries].sort((a,b) => b.reach-a.reach), 'reach');
+    }
+
+    function renderFindings() {
+      $('findings').innerHTML = data.analysis.findings.map(f => `<div class="panel finding"><h3>${esc(f.platform)}</h3><p>${esc(f.text)}</p></div>`).join('');
+    }
+
+    function renderGoals() {
+      renderTable('goals', [
+        {label:'Plataforma', key:'platform'},
+        {label:'Crec/sem', key:'weeklyGrowth'},
+        {label:'Proy. fin 2026', key:'projection'},
+        {label:'Meta', key:'goal'},
+        {label:'Cumple', render:r => `<span class="pill ${r.status.startsWith('Sí') ? 'ok' : 'warn'}">${esc(r.status)}</span>`}
+      ], data.analysis.goals);
+      renderTable('reachGoals', [
+        {label:'Plataforma', key:'platform'},
+        {label:'19 semanas', key:'actual'},
+        {label:'Meta mensual', key:'monthlyGoal'},
+        {label:'Meta acum.', key:'accGoal'},
+        {label:'% logro', render:r => `<span class="pill ${parseFloat(r.achievement) >= 100 ? 'ok' : 'warn'}">${esc(r.achievement)}</span>`}
+      ], data.analysis.reachGoals);
+    }
+
+    function renderMonthly(svgId, source, mode) {
+      const svg = $(svgId);
+      const {w,h,p} = chartBox(svg);
+      const months = source.months;
+      const rows = source.rows;
+      const all = rows.flatMap(r => r.values).filter(v => v !== null);
+      const max = Math.max(...all) * 1.12;
+      const x0=p.l, x1=w-p.r, y0=h-p.b, y1=p.t;
+      rows.forEach(r => {
+        const pts = r.values.map((v,i) => v === null ? null : ({x:scale(i,0,months.length-1,x0,x1),y:scale(v,0,max,y0,y1)})).filter(Boolean);
+        if (pts.length < 2) return;
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        path.setAttribute('d', linePath(pts)); path.setAttribute('fill','none'); path.setAttribute('stroke', colors[r.platform] || '#334155'); path.setAttribute('stroke-width',2.4);
+        svg.appendChild(path);
+      });
+      months.forEach((m,i) => { if (i % 2 === 0) addText(svg, scale(i,0,months.length-1,x0,x1), h-16, m, 'middle', 10); });
+      addText(svg, x0-8, y1+4, compact(max), 'end');
+      addText(svg, x0-8, y0+4, '0', 'end');
+    }
+
+    function renderCompetitive() {
+      const sel = $('competitiveSelect');
+      const names = Object.keys(data.competitive);
+      sel.innerHTML = names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+      const draw = () => renderBarChart('competitiveChart', [...data.competitive[sel.value]].sort((a,b) => b.pct-a.pct), 'pct', 'name', r => r.name === 'IMCO' ? '#0f766e' : '#94a3b8');
+      sel.addEventListener('change', draw);
+      draw();
+    }
+
+    function renderRecommendations() {
+      $('recommendations').innerHTML = data.analysis.recommendations.map(r => `<li>${esc(r)}</li>`).join('');
+    }
+
+    renderCards();
+    renderOverview();
+    renderLineChart();
+    renderBars();
+    renderFindings();
+    renderGoals();
+    renderMonthly('monthlyFollowers', data.followersMonthly);
+    renderMonthly('monthlyReach', data.reachTracking);
+    renderCompetitive();
+    renderRecommendations();
+    $('metricSelect').addEventListener('change', renderLineChart);
+    window.addEventListener('resize', () => {
+      renderLineChart(); renderBars(); renderMonthly('monthlyFollowers', data.followersMonthly); renderMonthly('monthlyReach', data.reachTracking); renderCompetitive();
+    });
+  </script>
+</body>
+</html>
